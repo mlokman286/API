@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practicing API</title>
+</head>
+
+<body>
+    <h1>JSON</h1>
+    <h3>JavaScript Object Notation</h3>
+    <input id="title" type="text" placeholder="title"><br>
+    <input id="comment" type="text" placeholder="Comment here"><br>
+    <button id="submit">SUBMIT</button>
+    <ul id='user-container'></ul>
+    <button id="click">Click to see users</button>
+
+    <script>
+        document.getElementById('submit').addEventListener('click', function () {
+            const title = document.getElementById('title').value;
+            const comment = document.getElementById('comment').value;
+            const post = { title: title, body: comment };
+            nowPostToServer(post)
+        })
+        function nowPostToServer(data) {
+            fetch('https://jsonplaceholder.typicode.com/post', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => console.log(data))
+                .catch(error => alert('Please try again later'))
+        }
+        //users handler
+        document.getElementById('click').addEventListener('click', function () {
+            fetch('https://jsonplaceholder.typicode.com/users')
+                .then(response => response.json())
+                .then(json => displayUsers(json))
+            function displayUsers(users) {
+                const userName = users.map(users => users.username)
+                for (let i = 0; i < userName.length; i++) {
+                    const user = userName[i];
+                    const ul = document.getElementById('user-container');
+                    const li = document.createElement('li');
+                    li.innerText = user;
+                    ul.appendChild(li);
+                }
+            }
+        })
+        document.getElementById('click').addEventListener('click', function () {
+            fetch('https://jsonplaceholder.typicode.com/users')
+                .then(response => response.json())
+                .then(json => displayUsers(json))
+            function displayUsers(users) {
+                const userName = users.map(users => users.username)
+                for (let i = 0; i < userName.length; i++) {
+                    const user = userName[i];
+                    const ul = document.getElementById('user-container');
+                    const li = document.createElement('li');
+                    li.innerText = user;
+                    ul.appendChild(li);
+                }
+            }
+        })
+
+    </script>
+</body>
+
+</html>
